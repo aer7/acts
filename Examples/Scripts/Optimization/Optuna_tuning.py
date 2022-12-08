@@ -40,7 +40,7 @@ from optuna.visualization import plot_param_importances
 from optuna.visualization import plot_slice
 
 srcDir = Path(__file__).resolve().parent
-
+curDir = Path(os.getcwd())
 
 def run_ckf(params, names, outDir):
 
@@ -49,7 +49,7 @@ def run_ckf(params, names, outDir):
 
     ckf_script = srcDir / "ckf.py"
     nevts = "--nEvents=1"
-    indir = "--indir=" + str(srcDir)
+    indir = "--indir=" + str(curDir)
     outdir = "--output=" + str(outDir)
 
     ret = ["python"]
@@ -110,8 +110,8 @@ class Objective:
             "deltaRMax",
         ]
 
-        outputDir = Path(srcDir / "Output_CKF")
-        outputfile = srcDir / "Output_CKF/performance_ckf.root"
+        outputDir = Path(curDir / "Output_CKF")
+        outputfile = curDir / "Output_CKF/performance_ckf.root"
         outputDir.mkdir(exist_ok=True)
         run_ckf(params, keys, outputDir)
         rootFile = uproot.open(outputfile)
@@ -121,7 +121,7 @@ class Objective:
             rootFile["duplicaterate_tracks"].member("fElements")[0]
         )
 
-        timingfile = srcDir / "Output_CKF/timing.tsv"
+        timingfile = curDir / "Output_CKF/timing.tsv"
         timing = pd.read_csv(timingfile, sep="\t")
         time_ckf = float(
             timing[timing["identifier"].str.match("Algorithm:TrackFindingAlgorithm")][
