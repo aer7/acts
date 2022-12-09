@@ -290,7 +290,7 @@ def addSeeding(
         elif seedingAlgorithm == SeedingAlgorithm.Default:
             logger.info("Using default seeding")
             # Use seeding
-            seedFinderConfig = acts.SeedfinderConfig(
+            seedFinderConfig = acts.SeedfinderConfigg(
                 **acts.examples.defaultKWArgs(
                     rMin=seedfinderConfigArg.r[0],
                     rMax=seedfinderConfigArg.r[1],
