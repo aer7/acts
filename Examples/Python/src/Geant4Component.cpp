@@ -23,6 +23,31 @@
 
 #include <FTFP_BERT.hh>
 #include <G4MagneticField.hh>
+#include <// This file is part of the Acts project.
+//
+// Copyright (C) 2021 CERN for the benefit of the Acts project
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+#include "Acts/Geometry/TrackingGeometry.hpp"
+#include "Acts/MagneticField/MagneticFieldProvider.hpp"
+#include "Acts/Plugins/Python/Utilities.hpp"
+#include "ActsExamples/Geant4/GdmlDetectorConstruction.hpp"
+#include "ActsExamples/Geant4/Geant4Simulation.hpp"
+#include "ActsExamples/Geant4/MagneticFieldWrapper.hpp"
+#include "ActsExamples/Geant4/MaterialPhysicsList.hpp"
+#include "ActsExamples/Geant4/MaterialSteppingAction.hpp"
+#include "ActsExamples/Geant4/ParticleTrackingAction.hpp"
+#include "ActsExamples/Geant4/SensitiveSteppingAction.hpp"
+#include "ActsExamples/Geant4/SensitiveSurfaceMapper.hpp"
+#include "ActsExamples/Geant4/SimParticleTranslation.hpp"
+
+#include <memory>
+
+#include <FTFP_BERT.hh>
+#include <G4MagneticField.hh>
 #include <G4RunManager.hh>
 #include <G4UserEventAction.hh>
 #include <G4UserRunAction.hh>
@@ -155,6 +180,10 @@ PYBIND11_MODULE(ActsPythonBindingsGeant4, mod) {
         // The Geant4 actions needed
         std::vector<G4UserRunAction*> runActions = {};
         std::vector<G4UserEventAction*> eventActions = {};
+
+	// eventActions.push_back(new ActsExamples::DDG4::DDG4RootRunAction::RunAction())
+	eventActions.push_back(new dd4hep::Geant4Output2ROOT::Geant4Output2ROOT(context, "Geant4Output2ROOT/RootOutput"))
+	
         std::vector<G4UserTrackingAction*> trackingActions = {};
         std::vector<G4UserSteppingAction*> steppingActions = {};
 
@@ -187,7 +216,8 @@ PYBIND11_MODULE(ActsPythonBindingsGeant4, mod) {
             g4PrCfg, Acts::getDefaultLogger("SimParticleTranslation", level));
         g4Cfg.detectorConstruction = detector;
 
-        // Set the user actions
+        // Set the user actions. These will be passed into Geant4Simulation who will
+	// then set the actions. Dont call SetUserAction here, Geant4Simulation will.
         g4Cfg.runActions = runActions;
         g4Cfg.eventActions = eventActions;
         g4Cfg.trackingActions = trackingActions;
