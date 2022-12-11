@@ -25,27 +25,6 @@
 // DDG4.py, which is called by the 'ddeve' script. "RootEventAction"
 // is a relatively generic name, feel free to change it.
 
-namespace ActsExamples {
+namespace ActsExamples::DDG4RootRunAction {
 
-class RootEventAction final : public G4UserEventAction {
- public:
-  /// Static access method
-  static EventAction* instance();
-
-  /// Construct the action and ensure singleton usage.
-  EventAction(std::vector<std::string> processFilter);
-  ~EventAction() final override;
-
-  /// Interface method for begin of the event
-  /// @param event is the G4Event to be processed
-  /// @note resets the event and step action
-  void BeginOfEventAction(const G4Event* event) final override;
-
-  /// Interface method for end of event
-  /// @param event is the G4Event to be processed
-  void EndOfEventAction(const G4Event* event) final override;
-
-  /// Clear the recorded data.
-  void clear();
-};
 }

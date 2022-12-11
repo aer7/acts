@@ -18,31 +18,7 @@
 #include "ActsExamples/Geant4/SensitiveSteppingAction.hpp"
 #include "ActsExamples/Geant4/SensitiveSurfaceMapper.hpp"
 #include "ActsExamples/Geant4/SimParticleTranslation.hpp"
-
-#include <memory>
-
-#include <FTFP_BERT.hh>
-#include <G4MagneticField.hh>
-#include <// This file is part of the Acts project.
-//
-// Copyright (C) 2021 CERN for the benefit of the Acts project
-//
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-#include "Acts/Geometry/TrackingGeometry.hpp"
-#include "Acts/MagneticField/MagneticFieldProvider.hpp"
-#include "Acts/Plugins/Python/Utilities.hpp"
-#include "ActsExamples/Geant4/GdmlDetectorConstruction.hpp"
-#include "ActsExamples/Geant4/Geant4Simulation.hpp"
-#include "ActsExamples/Geant4/MagneticFieldWrapper.hpp"
-#include "ActsExamples/Geant4/MaterialPhysicsList.hpp"
-#include "ActsExamples/Geant4/MaterialSteppingAction.hpp"
-#include "ActsExamples/Geant4/ParticleTrackingAction.hpp"
-#include "ActsExamples/Geant4/SensitiveSteppingAction.hpp"
-#include "ActsExamples/Geant4/SensitiveSurfaceMapper.hpp"
-#include "ActsExamples/Geant4/SimParticleTranslation.hpp"
+#include "ActsExamples/DDG4/DDG4RootRunAction.hpp"
 
 #include <memory>
 
@@ -182,7 +158,7 @@ PYBIND11_MODULE(ActsPythonBindingsGeant4, mod) {
         std::vector<G4UserEventAction*> eventActions = {};
 
 	// eventActions.push_back(new ActsExamples::DDG4::DDG4RootRunAction::RunAction())
-	eventActions.push_back(new dd4hep::Geant4Output2ROOT::Geant4Output2ROOT(context, "Geant4Output2ROOT/RootOutput"))
+	// eventActions.push_back(new dd4hep::Geant4Output2ROOT::Geant4Output2ROOT(context, "Geant4Output2ROOT/RootOutput"))
 	
         std::vector<G4UserTrackingAction*> trackingActions = {};
         std::vector<G4UserSteppingAction*> steppingActions = {};
