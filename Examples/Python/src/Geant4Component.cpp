@@ -18,7 +18,7 @@
 #include "ActsExamples/Geant4/SensitiveSteppingAction.hpp"
 #include "ActsExamples/Geant4/SensitiveSurfaceMapper.hpp"
 #include "ActsExamples/Geant4/SimParticleTranslation.hpp"
-#include "ActsExamples/DDG4/DDG4RootRunAction.hpp"
+#include "ActsExamples/DDG4/RootEventAction.hpp"
 #include <DDG4/Geant4Output2ROOT.h>
 #include <DDG4/Geant4Kernel.h>
 #include <DDG4/Geant4Context.h>
@@ -159,9 +159,6 @@ PYBIND11_MODULE(ActsPythonBindingsGeant4, mod) {
         // The Geant4 actions needed
         std::vector<G4UserRunAction*> runActions = {};
         std::vector<G4UserEventAction*> eventActions = {};
-
-	// eventActions.push_back(new ActsExamples::DDG4::DDG4RootRunAction::RunAction())
-	
         std::vector<G4UserTrackingAction*> trackingActions = {};
         std::vector<G4UserSteppingAction*> steppingActions = {};
 
@@ -172,11 +169,7 @@ PYBIND11_MODULE(ActsPythonBindingsGeant4, mod) {
         g4Cfg.runManager = std::make_shared<G4RunManager>();
         g4Cfg.runManager->SetUserInitialization(new FTFP_BERT());
 
-	// G4Run current_run = g4Cfg.runManager->getCurrentRun();
-	// g4Cfg.runManager->GetCurrentRun();
-	auto kernel = dd4hep::sim::Geant4Kernel::Geant4Kernel(detector);
-	auto context = dd4hep::sim::Geant4Context::Geant4Context(kernel);
-	auto rootaction = new dd4hep::Geant4Output2ROOT::Geant4Output2ROOT(context, "Geant4Output2ROOT/RootOutput");
+	G4UserEventAction* rootaction = new ActsExamples::DDG4::RootEventAction();
 	eventActions.push_back(rootaction);
 
         ParticleTrackingAction::Config g4TrackCfg;
