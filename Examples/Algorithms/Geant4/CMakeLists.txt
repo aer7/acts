@@ -14,6 +14,7 @@ set(ACTS_EXAMPLES_G4SOURCES
 if (ACTS_BUILD_EXAMPLES_DD4HEP)
     list(APPEND ACTS_EXAMPLES_G4SOURCES src/DDG4DetectorConstruction.cpp)
     list(APPEND ACTS_EXAMPLES_G4SOURCES src/RootEventAction.cpp)
+    list(APPEND ACTS_EXAMPLES_G4SOURCES src/RootRunAction.cpp)
 endif()
 
 add_library(

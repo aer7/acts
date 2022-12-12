@@ -16,29 +16,29 @@
 
 namespace ActsExamples::DDG4 {
 
-class RootEventAction final : public G4UserEventAction {
- public:
-  // G4UserEventAction
-  RootEventAction();
+  class RootEventAction final : public G4UserEventAction {
+  public:
+    // G4UserEventAction
+    RootEventAction();
 
-  // G4UserEventAction
-  ~RootEventAction() final override;
+    // G4UserEventAction
+    ~RootEventAction() final override;
 
-  // G4UserEventAction
-  // @param event is the G4Event to be processed
-  // @note resets the event and step action
-  void BeginOfEventAction(const G4Event* event) final override;
+    // G4UserEventAction
+    // @param event is the G4Event to be processed
+    // @note resets the event and step action
+    void BeginOfEventAction(const G4Event* event) final override;
   
-  // G4UserEventAction
-  // @param event is the G4Event to be processed
-  void EndOfEventAction(const G4Event* event) final override;
+    // G4UserEventAction
+    // @param event is the G4Event to be processed
+    void EndOfEventAction(const G4Event* event) final override;
   
- private:
-  // G4UserEventAction
-  static RootEventAction* s_instance;  
+  private:
+    // G4UserEventAction
+    static RootEventAction* s_instance;  
   
-  void saveCollection(const G4Event* event);
-  void commit(const G4Event* event);
-};
+    void saveCollection(const G4Event* event);
+    void commit(const G4Event* event);
+  };
 
 }

@@ -19,6 +19,7 @@
 #include "ActsExamples/Geant4/SensitiveSurfaceMapper.hpp"
 #include "ActsExamples/Geant4/SimParticleTranslation.hpp"
 #include "ActsExamples/DDG4/RootEventAction.hpp"
+#include "ActsExamples/DDG4/RootRunAction.hpp"
 #include <DDG4/Geant4Output2ROOT.h>
 #include <DDG4/Geant4Kernel.h>
 #include <DDG4/Geant4Context.h>
@@ -169,8 +170,11 @@ PYBIND11_MODULE(ActsPythonBindingsGeant4, mod) {
         g4Cfg.runManager = std::make_shared<G4RunManager>();
         g4Cfg.runManager->SetUserInitialization(new FTFP_BERT());
 
-	G4UserEventAction* rootaction = new ActsExamples::DDG4::RootEventAction();
-	eventActions.push_back(rootaction);
+	G4UserRunAction* rootrunaction = new ActsExamples::DDG4::RootRunAction();
+	runActions.push_back(rootrunaction);
+
+	G4UserEventAction* rooteventaction = new ActsExamples::DDG4::RootEventAction();
+	eventActions.push_back(rooteventaction);
 
         ParticleTrackingAction::Config g4TrackCfg;
         ParticleTrackingAction* particleAction = new ParticleTrackingAction(
