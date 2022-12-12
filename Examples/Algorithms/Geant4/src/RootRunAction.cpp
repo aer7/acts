@@ -9,25 +9,40 @@
 namespace ActsExamples::DDG4 {
   RootRunAction::RootRunAction() : G4UserRunAction() {
     std::cout << "construct run action\n";
-    run = nullptr;
+
+    std::string fname = "fname.root";
+    m_file = TFile::Open(fname.c_str(), "RECREATE", "New m_file opened.");
+    if (m_file->IsZombie()) {
+      delete m_file;
+      std::cout << "Failed to open m_file\n";
+      throw;
+    }
+
+    Sections::const_iterator i = m_sections.find(m_section);
+    if (i == m_sections.end()) {
+      std::cout << "end\n";
+      m_tree = new TTree(m_section.c_str(), ("Geant4 " + m_section + " information").c_str());
+      m_sections.emplace(m_section, m_tree);
+    } else {
+      m_tree = (*i).second;
+    }
+    
   }
   
   RootRunAction::~RootRunAction() {
     std::cout << "destruct run action\n";
-
-    // TDirectory::TContext ctxt(m_file);
+    
     // Sections::iterator i = m_sections.find(m_section);
-
-    // std::cout << "Closing root file."
-
     // if ( i != m_sections.end() )
     //   m_sections.erase(i);
     
     // m_branches.clear();
-    // m_tree->Write();
-    // m_file->Close();
+    std::cout << "writing tree\n";
+    m_tree->Write();
+    std::cout << "closing file\n";
+    m_file->Close();
     // m_tree = 0;
-    // detail::deletePtr (m_file);
+    // delete m_file;
   }
 
   G4Run* RootRunAction::GenerateRun() {
@@ -37,31 +52,10 @@ namespace ActsExamples::DDG4 {
 
   void RootRunAction::BeginOfRunAction(const G4Run* aRun) {
     std::cout << "begin run action\n";
-    std::string fname = "fname";
-    TDirectory::TContext ctxt(TDirectory::CurrentDirectory());
-    m_file = TFile::Open(fname.c_str(), "RECREATE", "Simulation data");
-    if (m_file->IsZombie()) {
-      delete m_file;
-      std::cout << "Failed to open m_file";
-      throw;
-    }
-    m_tree = section(m_section);
   }
   
   void RootRunAction::EndOfRunAction(const G4Run* aRun) {
-    std::cout << "End run\n";
-  }
-
-  TTree* RootRunAction::section(const std::string& nam) {
-    // Sections::const_iterator i = m_sections.find(nam);
-    // if (i == m_sections.end()) {
-    //   TDirectory::TContext ctxt(m_file);
-    //   TTree* t = new TTree(nam.c_str(), ("Geant4 " + nam + " information").c_str());
-    //   m_sections.emplace(nam, t);
-    //   return t;
-    // }
-    // return (*i).second;
-    return nullptr;
+    std::cout << "end run action\n";
   }
 
   int RootRunAction::fill(const std::string& nam, TClass* c, void* ptr) {
@@ -101,7 +95,7 @@ namespace ActsExamples::DDG4 {
     return 0;
   }
 
-  void RootRunAction::commit(G4Event* ctxt) {
+  void RootRunAction::commit(G4Event* event) {
     // TObjArray* a = m_tree->GetListOfBranches();
     // Long64_t evt = m_tree->GetEntries() + 1;
     // Int_t nb = a->GetEntriesFast();

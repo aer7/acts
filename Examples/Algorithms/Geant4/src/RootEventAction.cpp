@@ -47,7 +47,7 @@ namespace ActsExamples::DDG4 {
     G4HCofThisEvent* hce = event->GetHCofThisEvent();
     if (hce)  {
       int nCol = hce->GetNumberOfCollections();
-      std::cout << "Found HitCollection";
+      std::cout << "Found HitCollection\n";
       std::cout << std::to_string(nCol);
       // try  {
       // 	m_truth = event().extension<Geant4ParticleMap>(false);
@@ -87,7 +87,7 @@ namespace ActsExamples::DDG4 {
       //   m_truth = 0;
       //   return;
     } else {
-      std::cout << "No HitCollection.";
+      std::cout << "No HitCollection.\n";
     }
   }
 
