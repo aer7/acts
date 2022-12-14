@@ -16,37 +16,36 @@ namespace ActsExamples::DDG4 {
     m_tree = new TTree(m_section.c_str(), "EVENT description");
     m_sections.emplace(m_section, m_tree);
     
-    // if (m_file->IsZombie()) {
-    //   delete m_file;
-    //   std::cout << "Failed to open m_file\n";
-    //   throw;
-    // }
+    if (m_file->IsZombie()) {
+      delete m_file;
+      std::cout << "Failed to open m_file\n";
+      throw;
+    }
 
-    // Sections::const_iterator i = m_sections.find(m_section);
-    // if (i == m_sections.end()) {
-    //   std::cout << "end\n";
-      
-    // } else {
-    //   m_tree = (*i).second;
-    // }
+    Sections::const_iterator i = m_sections.find(m_section);
+    if (i == m_sections.end()) {
+      std::cout << "Constructor: end\n";      
+    } else {
+      m_tree = (*i).second;
+    }
     
   }
   
   RootRunAction::~RootRunAction() {
     std::cout << "destruct run action\n";
     
-    // Sections::iterator i = m_sections.find(m_section);
-    // if ( i != m_sections.end() )
-    //   m_sections.erase(i);
+    Sections::iterator i = m_sections.find(m_section);
+    if ( i != m_sections.end() )
+      m_sections.erase(i);
     
-    // m_branches.clear();
+    m_branches.clear();
     std::cout << "writing tree\n";
     m_file->cd();
     m_tree->Write();
     std::cout << "closing file\n";
     m_file->Close();
-    // m_tree = 0;
-    // delete m_file;
+    m_tree = 0;
+    delete m_file;
   }
 
   G4Run* RootRunAction::GenerateRun() {
