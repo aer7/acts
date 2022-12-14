@@ -50,11 +50,12 @@ namespace ActsExamples::DDG4 {
     bool m_handleMCTruth = true;
     /// Property: Flag if Monte-Carlo truth should be followed and checked
     bool m_filesByRun = false;
+    TTree* section(const std::string& nam);
     class ComponentCast;
     int fill(const std::string& nam, TClass* c, void* ptr);
     virtual void closeOutput();
     virtual void saveCollection(G4VHitsCollection* collection);
-    virtual void commit(G4Event* event);
+    virtual void commit(G4Event* ctxt);
     G4Run* run;
   };
 }
