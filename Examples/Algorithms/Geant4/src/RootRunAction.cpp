@@ -4,31 +4,28 @@
 #include <iostream>
 #include "ActsExamples/DDG4/RootRunAction.hpp"
 #include "TClass.h"
-#include <G4VHitsCollection.hh>
-#include <TDirectory.h>
+#include <G4VHitsCollection.hh> 
 
 namespace ActsExamples::DDG4 {
   RootRunAction::RootRunAction() : G4UserRunAction() {
     std::cout << "construct run action\n";
 
     std::string fname = "fname.root";
-    m_file = TFile::Open(fname.c_str(), "RECREATE", "fname description");
-    m_tree = new TTree(m_section.c_str(), "EVENT description");
-    m_sections.emplace(m_section, m_tree);
-    
-    // if (m_file->IsZombie()) {
-    //   delete m_file;
-    //   std::cout << "Failed to open m_file\n";
-    //   throw;
-    // }
+    m_file = TFile::Open(fname.c_str(), "RECREATE", "New m_file opened.");
+    if (m_file->IsZombie()) {
+      delete m_file;
+      std::cout << "Failed to open m_file\n";
+      throw;
+    }
 
-    // Sections::const_iterator i = m_sections.find(m_section);
-    // if (i == m_sections.end()) {
-    //   std::cout << "end\n";
-      
-    // } else {
-    //   m_tree = (*i).second;
-    // }
+    Sections::const_iterator i = m_sections.find(m_section);
+    if (i == m_sections.end()) {
+      std::cout << "end\n";
+      m_tree = new TTree(m_section.c_str(), ("Geant4 " + m_section + " information").c_str());
+      m_sections.emplace(m_section, m_tree);
+    } else {
+      m_tree = (*i).second;
+    }
     
   }
   
@@ -41,7 +38,6 @@ namespace ActsExamples::DDG4 {
     
     // m_branches.clear();
     std::cout << "writing tree\n";
-    m_file->cd();
     m_tree->Write();
     std::cout << "closing file\n";
     m_file->Close();

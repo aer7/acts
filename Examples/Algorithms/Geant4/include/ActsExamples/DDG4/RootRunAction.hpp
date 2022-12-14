@@ -5,8 +5,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include "TClass.h"
-#include <G4VHitsCollection.hh>
-#include "TROOT.h"
+#include <G4VHitsCollection.hh> 
 
 namespace ActsExamples::DDG4 {
 
