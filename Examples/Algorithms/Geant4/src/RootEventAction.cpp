@@ -43,7 +43,7 @@ namespace ActsExamples::DDG4 {
 
   // G4UserEventAction
   void RootEventAction::EndOfEventAction(const G4Event* event) {
-    std::cout << "end event\n";    
+    std::cout << "end event\n";
     G4HCofThisEvent* hce = event->GetHCofThisEvent();
     if (hce)  {
       int nCol = hce->GetNumberOfCollections();

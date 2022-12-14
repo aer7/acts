@@ -38,10 +38,7 @@ ActsExamples::RootParticleWriter::RootParticleWriter(
   m_outputTree = new TTree(m_cfg.treeName.c_str(), m_cfg.treeName.c_str());
   if (m_outputTree == nullptr) {
     throw std::bad_alloc();
- }
-
-  // all the info is here. why am i wasting my time doing this
-  // in Geant?!?!
+  }
 
   // setup the branches
   m_outputTree->Branch("event_id", &m_eventId);
