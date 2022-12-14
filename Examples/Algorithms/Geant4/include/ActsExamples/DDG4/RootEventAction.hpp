@@ -35,10 +35,7 @@ class RootEventAction final : public G4UserEventAction {
   
  private:
   // G4UserEventAction
-  static RootEventAction* s_instance;  
-  
-  void saveCollection(const G4Event* event);
-  void commit(const G4Event* event);
+  static RootEventAction* s_instance;
 };
 
 }
