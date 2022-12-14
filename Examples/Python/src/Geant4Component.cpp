@@ -19,7 +19,6 @@
 #include "ActsExamples/Geant4/SensitiveSurfaceMapper.hpp"
 #include "ActsExamples/Geant4/SimParticleTranslation.hpp"
 #include "ActsExamples/DDG4/DDG4RootRunAction.hpp"
-#include <DDG4/Geant4Output2ROOT.h>
 
 #include <memory>
 
