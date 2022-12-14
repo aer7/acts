@@ -21,24 +21,11 @@ from acts.examples.reconstruction import (
 )
 from common import getOpenDataDetectorDirectory
 from acts.examples.odd import getOpenDataDetector
-import datetime
-import os
 
-logger = acts.logging.getLogger("full_chain_odd")
-logger.info("Starting full_chain_odd")
-
-ttbar_pu200 = True
+ttbar_pu200 = False
 u = acts.UnitConstants
 geoDir = getOpenDataDetectorDirectory()
-outputDir = pathlib.Path.cwd() / datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-os.mkdir(outputDir)
-os.mkdir(outputDir / 'pythia')
-os.mkdir(outputDir / 'fatras')
-os.mkdir(outputDir / 'digitization')
-os.mkdir(outputDir / 'seeding')
-os.mkdir(outputDir / 'ckf')
-os.mkdir(outputDir / 'vertexfitting')
-
+outputDir = pathlib.Path.cwd() / "odd_output"
 # acts.examples.dump_args_calls(locals())  # show python binding calls
 
 oddMaterialMap = geoDir / "data/odd-material-maps.root"
@@ -52,10 +39,9 @@ detector, trackingGeometry, decorators = getOpenDataDetector(
 field = acts.ConstantBField(acts.Vector3(0.0, 0.0, 2.0 * u.T))
 rnd = acts.examples.RandomNumbers(seed=42)
 
-s = acts.examples.Sequencer(events=1, numThreads=-1, outputDir=str(outputDir))
+s = acts.examples.Sequencer(events=100, numThreads=-1, outputDir=str(outputDir))
 
 if not ttbar_pu200:
-    logger.info('Using particle gun, not pythia.')
     addParticleGun(
         s,
         MomentumConfig(1.0 * u.GeV, 10.0 * u.GeV, transverse=True),
@@ -64,17 +50,16 @@ if not ttbar_pu200:
         rnd=rnd,
     )
 else:
-    logger.info('Using pythia, not particle gun.')
     addPythia8(
         s,
         hardProcess=["Top:qqbar2ttbar=on"],
-        npileup=10,
+        npileup=200,
         vtxGen=acts.examples.GaussianVertexGenerator(
             stddev=acts.Vector4(0.0125 * u.mm, 0.0125 * u.mm, 55.5 * u.mm, 5.0 * u.ns),
             mean=acts.Vector4(0, 0, 0, 0),
         ),
         rnd=rnd,
-        outputDirRoot=outputDir / 'pythia',
+        outputDirRoot=outputDir,
     )
 
 addFatras(
@@ -84,7 +69,7 @@ addFatras(
     ParticleSelectorConfig(eta=(-3.0, 3.0), pt=(150 * u.MeV, None), removeNeutral=True)
     if ttbar_pu200
     else ParticleSelectorConfig(),
-    outputDirRoot=outputDir / 'fatras',
+    outputDirRoot=outputDir,
     rnd=rnd,
 )
 
@@ -93,7 +78,7 @@ addDigitization(
     trackingGeometry,
     field,
     digiConfigFile=oddDigiConfig,
-    outputDirRoot=outputDir / 'digitization',
+    outputDirRoot=outputDir,
     rnd=rnd,
 )
 
@@ -105,7 +90,7 @@ addSeeding(
     if ttbar_pu200
     else TruthSeedRanges(),
     geoSelectionConfigFile=oddSeedingSel,
-    outputDirRoot=outputDir / 'seeding',
+    outputDirRoot=outputDir,
 )
 
 addCKFTracks(
@@ -113,7 +98,7 @@ addCKFTracks(
     trackingGeometry,
     field,
     CKFPerformanceConfig(ptMin=1.0 * u.GeV if ttbar_pu200 else 0.0, nMeasurementsMin=6),
-    outputDirRoot=outputDir / 'ckf',
+    outputDirRoot=outputDir,
 )
 
 addVertexFitting(
@@ -121,8 +106,8 @@ addVertexFitting(
     field,
     TrackSelectorRanges(pt=(1.0 * u.GeV, None), absEta=(None, 3.0), removeNeutral=True),
     vertexFinder=VertexFinder.Iterative,
+    outputDirRoot=outputDir,
     trajectories="trajectories",
-    outputDirRoot=outputDir / 'vertexfitting'
 )
 
 s.run()
