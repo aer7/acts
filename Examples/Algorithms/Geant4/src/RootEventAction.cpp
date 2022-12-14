@@ -27,23 +27,24 @@ namespace ActsExamples::DDG4 {
     } else {
       s_instance = this;
     }
-    std::cout << "construct event action \n";
+    std::cout << "construct \n";
   }
 
   // G4UserEventAction
   RootEventAction::~RootEventAction() {
     s_instance = nullptr;
-    std::cout << "destruct event action \n";
+    std::cout << "destruct \n";
   }
 
   // G4UserEventAction
   void RootEventAction::BeginOfEventAction(const G4Event* event) {
-    std::cout << "begin event action\n";
+    std::cout << "start event\n";
   }
 
   // G4UserEventAction
   void RootEventAction::EndOfEventAction(const G4Event* event) {
     std::cout << "end event\n";
+    // OutputContext<G4Event> ctxt(evt);
     G4HCofThisEvent* hce = event->GetHCofThisEvent();
     if (hce)  {
       int nCol = hce->GetNumberOfCollections();
@@ -57,7 +58,6 @@ namespace ActsExamples::DDG4 {
       // 		   "Is a Particle handler installed ?",evt->GetEventID());
       // 	}
       // 	try  {
-      //      std::cout << "saving event";
       // 	  saveEvent(ctxt);
       // 	  for (int i = 0; i < nCol; ++i) {
       // 	    G4VHitsCollection* hc = hce->GetHC(i);
@@ -92,7 +92,6 @@ namespace ActsExamples::DDG4 {
   }
 
   void RootEventAction::saveCollection(const G4Event* event) {
-    std::cout << "called savecollection";
     // Geant4HitCollection* coll = dynamic_cast<Geant4HitCollection*>(collection);
     // string hc_nam = collection->GetName();
     // for(const auto& n : m_disabledCollections)  {
